@@ -14,6 +14,12 @@
         {% endblock %}
     </head>
     <body>
+        <div>
+            <a href="{{ path('app_user',{id: 70}) }}">My data</a>
+            <a href="{{ path('app_users') }}">List Persons</a>
+            <a href="{{ path('app_user',{id: 70}) }}">Search</a>
+            <a href="{{ path('app_user',{id: 70}) }}">Logout</a>
+        </div>
         {% block body %}{% endblock %}
     </body>
 </html>

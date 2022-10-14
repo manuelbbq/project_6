@@ -25,7 +25,7 @@ class Usercontroller extends AbstractController
     public function create(Request $request, EntityManagerInterface $entityManager) :Response
     {
         $user = new User();
-        $form = $this->createForm(UserFormType::class, $user);
+        $form = $this->createForm(UserFormType::class, $user,);
         $form->handleRequest($request);
         if($form->isSubmitted() && $form->isValid()){
             $user = $form->getData();
@@ -57,22 +57,30 @@ class Usercontroller extends AbstractController
         return $this->render('user/users.html.twig');
     }
 
-    #[Route('/users/{id}', name: 'app_user')]
-    public function show(User $user) :Response
+
+
+
+
+
+
+    #[Route('users/edit/{id}', name: 'app_edit_user')]
+    public function edit(User $user, Request $request, EntityManagerInterface $entityManager): Response
     {
-        return $this->render('user/user.html.twig',[
-            'user'=> $user]);
+        $form = $this->createForm(UserFormType::class, $user);
+        $form->handleRequest($request);
+        if($form->isSubmitted() && $form->isValid()){
+            $user = $form->getData();
+            $entityManager->persist($user);
+            $entityManager->flush();
 
-    }
+            return $this->redirectToRoute('app_users');
+        }
 
 
+        return $this->renderForm('user/edit.html.twig',[
+            'form' => $form
+        ]);
 
-
-
-    #[Route('users/{id}/edit', name: 'app_edit_user')]
-    public function edit(User $user): Response
-    {
-        return $this->render('user/edit.html.twig');
     }
     #[Route('users/{id}/delete', name: 'app_delete_user')]
     public function delete(User $user):Response
@@ -96,6 +104,14 @@ class Usercontroller extends AbstractController
         return new Response(sprintf('Hallo %d du wohnst in %s',
         $user->getId(),
         $user->getOrt()));
+    }
+
+    #[Route('/users/{id}', name: 'app_user')]
+    public function show(User $user) :Response
+    {
+        return $this->render('user/user.html.twig',[
+            'user'=> $user]);
+
     }
 
 }
