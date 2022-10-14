@@ -48,6 +48,10 @@ class User
     #[ORM\Column]
     private \DateTimeImmutable $createdAt;
 
+    #[ORM\ManyToOne(inversedBy: 'user')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Rights $rights = null;
+
     public function __construct()
     {
         $this->createdAt = new \DateTimeImmutable();
@@ -139,6 +143,18 @@ class User
     public function setCreatedAt(\DateTimeImmutable $createdAt): self
     {
         $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    public function getRights(): ?Rights
+    {
+        return $this->rights;
+    }
+
+    public function setRights(?Rights $rights): self
+    {
+        $this->rights = $rights;
 
         return $this;
     }
